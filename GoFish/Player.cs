@@ -52,7 +52,11 @@
         /// <param name="stock">Stock to get the next hand from<</param>
         public void GetNextHand(Deck stock)
         {
-            throw new NotImplementedException();
+            var fiveCards = stock.Take(5);
+            foreach (var card in fiveCards)
+            {
+                hand.Add(card);
+            }
         }
 
         /// <summary>
