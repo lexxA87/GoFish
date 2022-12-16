@@ -1,6 +1,6 @@
 ﻿namespace GoFish
 {
-    class CardCompererByValue : IComparer<Card>
+    public class CardCompererByValue : IComparer<Card>
     {
         public int Compare(Card? x, Card? y)
         {
