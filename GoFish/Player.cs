@@ -27,7 +27,7 @@
         /// <summary>
         /// Returns the current status of the player: the number of cards and books
         /// </summary>
-        public string Status => throw new NotImplementedException();
+        public string Status => $"{Name} has {hand.Count} card{S(hand.Count)} and {books.Count} book{S(books.Count)}";
 
         /// <summary>
         /// Constructor to create player
@@ -68,7 +68,10 @@
         /// <returns>The cards that were pulled out of the other player's hand</returns>
         public IEnumerable<Card> DoYouHaveAny(Values value, Deck deck)
         {
-            throw new NotImplementedException();
+            var answer = hand.Where(card => card.Value == value).OrderBy(card => card.Suit);
+            hand = hand.Where(card => card.Value != value).ToList();
+            if (hand.Count == 0) GetNextHand(deck);
+            return answer;
         }
 
         /// <summary>
