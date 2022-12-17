@@ -17,7 +17,20 @@
         /// <param name="stock">Shuffled stock of cards to deal from</param>
         public GameState(string humanPlayerName, IEnumerable<string> opponentNames, Deck stock)
         {
-            throw new NotImplementedException();
+            this.Stock = stock;
+
+            HumanPlayer = new Player(humanPlayerName);
+            HumanPlayer.GetNextHand(Stock);
+
+            var opponents = new List<Player>();
+            foreach (string name in opponentNames)
+            {
+                var player = new Player(name);
+                player.GetNextHand(stock);
+                opponents.Add(player);
+            }
+            Opponents = opponents;
+            Players = new List<Player>() { HumanPlayer }.Concat(Opponents);
         }
 
         /// <summary>
