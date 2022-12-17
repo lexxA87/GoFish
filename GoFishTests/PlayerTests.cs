@@ -34,8 +34,8 @@ namespace GoFishTests
 
             CollectionAssert.AreEqual(new List<string>()
             {
-                "Three of Clubs",
                 "Three of Diamonds",
+                "Three of Clubs",
                 "Three of Hearts",
             }, threes);
 
@@ -89,6 +89,15 @@ namespace GoFishTests
             CollectionAssert.AreEqual(new List<string>() { "Four of Diamonds" }, hand);
 
             Assert.AreEqual("Owen has 1 card and 2 books", player.Status);
+        }
+
+        [TestMethod]
+        public void TestDrawCard()
+        {
+            var player = new Player("Owen", new List<Card>());
+            player.DrawCard(new Deck());
+            Assert.AreEqual(1, player.Hand.Count());
+            Assert.AreEqual("Ace of Diamonds", player.Hand.First().ToString());
         }
     }
 }

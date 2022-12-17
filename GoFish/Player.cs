@@ -108,7 +108,7 @@
         /// <param name="stock">Stock to draw a card from</param>
         public void DrawCard(Deck stock)
         {
-            throw new NotImplementedException();
+            hand.Add(stock.Deal(0));
         }
 
         /// <summary>
