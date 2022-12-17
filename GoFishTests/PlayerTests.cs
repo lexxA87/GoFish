@@ -56,5 +56,39 @@ namespace GoFishTests
 
             Assert.AreEqual("Owen has 1 card and 0 books", player.Status);
         }
+
+        [TestMethod]
+        public void TestAddCardsAndPullOutBooks()
+        {
+            IEnumerable<Card> cards = new List<Card>()
+            {
+                new Card(Values.Jack, Suits.Spades),
+                new Card(Values.Three, Suits.Clubs),
+                new Card(Values.Jack, Suits.Hearts),
+                new Card(Values.Three, Suits.Hearts),
+                new Card(Values.Four, Suits.Diamonds),
+                new Card(Values.Jack, Suits.Diamonds),
+                new Card(Values.Jack, Suits.Clubs),
+            };
+            var player = new Player("Owen", cards);
+
+            Assert.AreEqual(0, player.Books.Count());
+
+            var cardsToAdd = new List<Card>()
+            {
+                new Card(Values.Three, Suits.Diamonds),
+                new Card(Values.Three, Suits.Spades),
+            };
+
+            player.AddCardsAndPullOutBooks(cardsToAdd);
+
+            var books = player.Books.ToList();
+            CollectionAssert.AreEqual(new List<Values> { Values.Three, Values.Jack }, books);
+
+            var hand = player.Hand.Select(card => card.ToString()).ToList();
+            CollectionAssert.AreEqual(new List<string>() { "Four of Diamonds" }, hand);
+
+            Assert.AreEqual("Owen has 1 card and 2 books", player.Status);
+        }
     }
 }

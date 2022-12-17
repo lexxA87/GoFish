@@ -52,10 +52,9 @@
         /// <param name="stock">Stock to get the next hand from<</param>
         public void GetNextHand(Deck stock)
         {
-            var fiveCards = stock.Take(5);
-            foreach (var card in fiveCards)
+            while ((stock.Count > 0) && (hand.Count < 5))
             {
-                hand.Add(card);
+                hand.Add(stock.Deal(0));
             }
         }
 
@@ -81,7 +80,26 @@
         /// <param name="cards">Cards from the other player to add</param>
         public void AddCardsAndPullOutBooks(IEnumerable<Card> cards)
         {
-            throw new NotImplementedException();
+            hand.AddRange(cards);
+
+            var foundBooks = hand
+                .GroupBy(card => card.Value)
+                .Where(group => group.Count() == 4)
+                .Select(group => group.Key);
+
+            books.AddRange(foundBooks);
+            books.Sort();
+
+            hand = hand.Where(card => !books.Contains(card.Value)).ToList();
+            //var groups = hand.OrderBy(card => card).GroupBy(card => card.Value);
+            //foreach (var group in groups)
+            //{
+            //    if (group.Count() == 4)
+            //    {
+            //        books.Add(group.Key);
+            //        hand = hand.Where(card => card.Value != group.Key).ToList();
+            //    }
+            //}
         }
 
         /// <summary>
