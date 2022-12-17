@@ -108,14 +108,18 @@
         /// <param name="stock">Stock to draw a card from</param>
         public void DrawCard(Deck stock)
         {
-            hand.Add(stock.Deal(0));
+            if (stock.Count > 0)
+                AddCardsAndPullOutBooks(new List<Card>() { stock.Deal(0) });
         }
 
         /// <summary>
         /// Gets a random value from the player's hand
         /// </summary>
         /// <returns>The value of a randomly selected card in the player's hand</returns>
-        public Values RandomValueFromHand() => throw new NotImplementedException();
+        public Values RandomValueFromHand() => hand.OrderBy(card => card.Value)
+            .Select(card => card.Value)
+            .Skip(Random.Next(hand.Count))
+            .First();
 
         public override string? ToString() => Name;
     }
