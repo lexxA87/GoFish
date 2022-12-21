@@ -18,7 +18,10 @@
         /// <param name="computerPlayerNames">Names of the computer players</param>
         public GameController(string humanPlayerName, IEnumerable<string> computerPlayerNames)
         {
-            throw new NotImplementedException();
+            gameState = new GameState(humanPlayerName, computerPlayerNames, new Deck().Shuffle());
+            Status = $"Starting a new game with players {string.Join(", ", gameState.Players)}";
+            //var playersNames = new List<string>() { humanPlayerName }.Concat(computerPlayerNames);
+            //Status = $"Starting a new game with players {string.Join(", ", playersNames)}";
         }
 
         /// <summary>
@@ -28,7 +31,13 @@
         /// <param name="valueToAskFor">The value of the card the human is asking for</param>
         public void NextRound(Player playerToAsk, Values valueToAskFor)
         {
-            throw new NotImplementedException();
+            Status = gameState.PlayRound(gameState.HumanPlayer, playerToAsk,
+                valueToAskFor, gameState.Stock) + Environment.NewLine;
+            ComputerPlayersPlayNextRound();
+            Status += string.Join(Environment.NewLine,
+                gameState.Players.Select(player => player.Status));
+            Status += $"{Environment.NewLine}The stock has {gameState.Stock.Count()} cards";
+            Status += Environment.NewLine + gameState.CheckForWinner();
         }
 
         /// <summary>
@@ -37,7 +46,23 @@
         /// </summary>
         private void ComputerPlayersPlayNextRound()
         {
-            throw new NotImplementedException();
+            IEnumerable<Player> computerPlayersWithCards;
+            do
+            {
+                computerPlayersWithCards =
+                gameState
+                .Opponents
+                .Where(player => player.Hand.Count() > 0);
+                foreach (Player player in computerPlayersWithCards)
+                {
+                    var randomPlayer = gameState.RandomPlayer(player);
+                    var randomValue = player.RandomValueFromHand();
+                    Status += gameState
+                    .PlayRound(player, randomPlayer, randomValue, gameState.Stock)
+                    + Environment.NewLine;
+                }
+            } while ((gameState.HumanPlayer.Hand.Count() == 0)
+            && (computerPlayersWithCards.Count() > 0));
         }
 
         /// <summary>
@@ -45,7 +70,10 @@
         /// </summary>
         public void NewGame()
         {
-            throw new NotImplementedException();
+            Status = "Starting a new game";
+            gameState = new GameState(gameState.HumanPlayer.Name,
+                gameState.Opponents.Select(player => player.Name),
+                new Deck().Shuffle());
         }
     }
 }
