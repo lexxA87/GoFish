@@ -2,7 +2,7 @@
 {
     public class GameController
     {
-        public static Random Random = new Random();
+        public static Random Random = new();
 
         public GameState gameState;
         public bool GameOver { get { return gameState.GameOver; } }
